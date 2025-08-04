@@ -21,36 +21,40 @@ def get_window_title(token):
     )
     # Get all exist windows
     for window in window_list:
-        logger.info(window) if "Maple" in window else None
-
+        logger.debug(f"[get_window_title] Raw window: {window}")
         title = window.get(Quartz.kCGWindowOwnerName, '')
         if token in title:
+            logger.info(f"[get_window_title] Found match: {title}")
             return title
     return None
 
+
 def get_window_region(window_title):
+    logger.debug(f"[get_window_region] Looking for: {window_title}")
+
     window_list = Quartz.CGWindowListCopyWindowInfo(
         Quartz.kCGWindowListOptionOnScreenOnly | Quartz.kCGWindowListExcludeDesktopElements,
         Quartz.kCGNullWindowID
     )
-    # Get all exist windows
+    logger.debug(f"[get_window_region] Retrieved {len(window_list)} windows")
     all_titles = []
     for window in window_list:
+        logger.debug(f"[get_window_region] Raw window: {window}")
         title = window.get(Quartz.kCGWindowOwnerName, '')
         owner = window.get(Quartz.kCGWindowOwnerName, '')
+        if not title:
+            logger.debug(f"[get_window_region] Skipped unnamed window: {window}")
         if title:
             all_titles.append(f"{title} (Owner: {owner})")
-    logger.debug(f"all_titles: {all_titles}")
+    logger.debug(f"[get_window_region] All titles: {all_titles}")
+
     for window in window_list:
-        if window.get(Quartz.kCGWindowOwnerName, '') == window_title:
+        current_title = window.get(Quartz.kCGWindowOwnerName, '')
+        logger.debug(f"[get_window_region] Comparing '{current_title}' to target '{window_title}'")
+        if current_title == window_title:
             bounds = window.get(Quartz.kCGWindowBounds, {})
-            return {
-                "left": int(bounds.get('X', 0)),
-                "top": int(bounds.get('Y', 0)),
-                "width": int(bounds.get('Width', 0)),
-                "height": int(bounds.get('Height', 0))
-            }
-    return None
+            logger.info(f"[get_window_region] Match found. Bounds: {bounds}")
+
 
 class GameWindowCapturor:
     '''
@@ -67,7 +71,7 @@ class GameWindowCapturor:
             logger.error(
                 f"[GameWindowCapturor] Unable to find window titles that contain {cfg['game_window']['title']}"
             )
-            return -1
+            raise RuntimeError(f"[GameWindowCapturor] Unable to find window titles that contain {cfg['game_window']['title']}")
 
         self.fps = 0
         self.fps_limit = cfg["system"]["fps_limit_window_capturor"]
@@ -75,6 +79,7 @@ class GameWindowCapturor:
 
         # 使用 mss 來擷取特定螢幕區域
         self.capture = mss.mss()
+        logger.info("[GameWindowCapturor] mss.mss() called")
 
         # Get game window region
         self.update_window_region()
@@ -82,10 +87,13 @@ class GameWindowCapturor:
         # start game window capture
         threading.Thread(target=self.start_capture, daemon=True).start()
 
-        # Wait frame init
-        time.sleep(0.1)
-        while self.frame is None:
-            self.limit_fps()
+        # Wait for initial frame with timeout
+        start = time.time()
+        while self.frame is None and time.time() - start < 5:
+            time.sleep(0.05)
+
+        if self.frame is None:
+            raise RuntimeError("[GameWindowCapturor] Failed to capture initial frame.")
 
     def start_capture(self):
         '''
