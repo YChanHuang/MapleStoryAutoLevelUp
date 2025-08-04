@@ -136,7 +136,7 @@ class KeyBoardListener():
         - False
         '''
         active_window = gw.getActiveWindow()
-        return active_window is not None and self.window_title in active_window.title
+        return active_window is not None and self.window_title in active_window.title()
 
     def limit_fps(self):
         '''

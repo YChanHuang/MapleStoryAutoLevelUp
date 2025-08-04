@@ -21,7 +21,9 @@ def get_window_title(token):
     )
     # Get all exist windows
     for window in window_list:
-        title = window.get(Quartz.kCGWindowName, '')
+        logger.info(window) if "Maple" in window else None
+
+        title = window.get(Quartz.kCGWindowOwnerName, '')
         if token in title:
             return title
     return None
@@ -34,13 +36,13 @@ def get_window_region(window_title):
     # Get all exist windows
     all_titles = []
     for window in window_list:
-        title = window.get(Quartz.kCGWindowName, '')
+        title = window.get(Quartz.kCGWindowOwnerName, '')
         owner = window.get(Quartz.kCGWindowOwnerName, '')
         if title:
             all_titles.append(f"{title} (Owner: {owner})")
     logger.debug(f"all_titles: {all_titles}")
     for window in window_list:
-        if window.get(Quartz.kCGWindowName, '') == window_title:
+        if window.get(Quartz.kCGWindowOwnerName, '') == window_title:
             bounds = window.get(Quartz.kCGWindowBounds, {})
             return {
                 "left": int(bounds.get('X', 0)),
