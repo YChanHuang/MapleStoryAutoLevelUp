@@ -54,6 +54,17 @@ def get_window_region(window_title):
         if current_title == window_title:
             bounds = window.get(Quartz.kCGWindowBounds, {})
             logger.info(f"[get_window_region] Match found. Bounds: {bounds}")
+            # Return the region in the format expected by mss
+            return {
+                "left": int(bounds.get('X', 0)),
+                "top": int(bounds.get('Y', 0)),
+                "width": int(bounds.get('Width', 0)),
+                "height": int(bounds.get('Height', 0))
+            }
+    
+    # No matching window found
+    logger.warning(f"[get_window_region] No window found with title: {window_title}")
+    return None
 
 
 class GameWindowCapturor:
@@ -65,7 +76,6 @@ class GameWindowCapturor:
         self.frame = None
         self.lock = threading.Lock()
         self.is_terminated = False
-
         self.window_title = get_window_title(cfg["game_window"]["title"])
         if self.window_title is None:
             logger.error(
@@ -120,9 +130,10 @@ class GameWindowCapturor:
         '''
         Update window region
         '''
+        logger.info(f"Searching title: {self.window_title}")
         self.region = get_window_region(self.window_title)
         if self.region is None:
-            text = f"Cannot find window: {self.window_title}"
+            text = f"[update_window_region] Cannot find window: {self.window_title}"
             logger.error(text)
             raise RuntimeError(text)
 
