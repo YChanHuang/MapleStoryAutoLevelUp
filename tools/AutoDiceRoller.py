@@ -7,6 +7,7 @@ import time
 import argparse
 import sys
 import signal
+import random
 
 # Library import
 import numpy as np
@@ -71,6 +72,10 @@ class AutoDiceRoller:
         self.img_minimap = np.zeros((10, 10, 3), dtype=np.uint8) # minimap on game screen
         # Timers
         self.t_last_frame = time.time() # Last frame timer, for fps calculation
+        
+        # Roll counting for periodic breaks
+        self.roll_count = 0
+        self.last_break_time = time.time()
 
         # Load defautl yaml config
         cfg = load_yaml("config/config_default.yaml")
@@ -399,6 +404,7 @@ class AutoDiceRoller:
             if is_jackpot:
                 self.is_enable = False
                 logger.info("Hit Jackpot! Stop!")
+                return  # Exit early if jackpot hit
 
             # Click to roll the dice or not (controlled by slower fps_limit)
             if self.is_enable:
@@ -407,6 +413,14 @@ class AutoDiceRoller:
                 
                 # Only roll dice if enough time has passed since last roll
                 if current_time - self.last_dice_roll_time >= dice_roll_interval:
+                    # Check if we need a break every 100 rolls
+                    if self.roll_count > 0 and self.roll_count % 100 == 0:
+                        break_duration = random.uniform(3.0, 5.0)
+                        logger.info(f"🛌 Taking a {break_duration:.1f}s break after {self.roll_count} rolls...")
+                        time.sleep(break_duration)
+                        self.last_break_time = current_time
+                        logger.info("🎯 Resuming dice rolling!")
+                    
                     # Use the exact same scaling approach as debug_auto_dice_roller.py
                     scale_x_work_to_raw = raw_width / work_width
                     scale_y_work_to_raw = raw_height / work_height
@@ -418,6 +432,7 @@ class AutoDiceRoller:
                     click_in_game_window(window_title, dice_raw_coords)
                     logger.info(f"Roll the dice: {loc_dice_work} -> {dice_raw_coords}")
                     self.last_dice_roll_time = current_time
+                    self.roll_count += 1
 
         # Save debug screenshot with annotations if 'd' is pressed
         if 'd' in self.kb.key_pressing:
