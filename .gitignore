@@ -29,7 +29,6 @@ testing_tools/
 # Configs
 *.config_tmp.yaml
 *config_custom.yaml
-config/*_backup.yaml
 *.envrc
 .envrc
 
@@ -43,13 +42,13 @@ test_results_summary.md
 *production_analysis.md
 *synchronized_performance_update.md
 
-# Debug and coordinate tools
-coordinate_tools/
-debug_tools/
+# Debug output files (but keep the tools)
 *debug*.png
 debug_images/
-optimize_fps_config.py
-test_opencv_speed.py
+
+# User-specific test outputs
+*_test_output*
+*_benchmark_*
 
 # Development documentation that may contain sensitive info
 REFACTORING_README.md
