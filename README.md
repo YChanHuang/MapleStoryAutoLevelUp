@@ -161,15 +161,38 @@ Auto Dice Roller help you roll the dice in character creation page.
 
 User can assign the desire attributes and let the script do the job for you
 
+### Basic Usage
 ```
-python -m tools.AutoDiceRoller --attribute <STR,DEX,INT,LUK>
+python -m tools.AutoDiceRoller --attribute "<STR,DEX,INT,LUK>" --timeout <seconds>
 
 Example: for creating a full-INT wizard character:
-python -m tools.AutoDiceRoller --attribute 4,4,13,4
+python -m tools.AutoDiceRoller --attribute "4,4,13,4" --timeout 600
 
 Example: question mark is allowed if you don't want to assign a value
-python -m tools.AutoDiceRoller --attribute 4,4,?,?
+python -m tools.AutoDiceRoller --attribute "4,4,?,?" --timeout 120
 ```
+
+### Interactive Keyboard Shortcuts
+While the AutoDiceRoller is running, you can use these keyboard shortcuts:
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `D` | Debug Screenshots | Save annotated screenshots with dice and attribute detection areas |
+| `S` | Quick Screenshot | Take a screenshot of the current game frame |
+| `Q` | Quit | Stop the dice roller immediately |
+| `Ctrl+C` | Graceful Stop | Stop the dice roller with cleanup |
+
+### Performance Modes
+The dice roller supports different timing modes via configuration:
+- **Safe Mode**: 0.9-1.2s delays (100% reliability, ~0.9 rolls/sec)
+- **High-Speed Mode**: 0.4-0.6s delays (98% reliability, ~1.5 rolls/sec)
+- **Ultra-Fast Mode**: 0.2-0.3s delays (95% reliability, ~3+ rolls/sec)
+
+### Output Files
+When pressing `D` for debug screenshots, files are saved to `debug_images/`:
+- `debug_dice_full_{timestamp}.png` - Full annotated screenshot
+- `debug_dice_crop_{timestamp}.png` - Close-up of dice area
+- `debug_attr_{STR|DEX|INT|LUK}_{timestamp}.png` - Individual attribute detection areas
 ## Discord
 Join our Discord server for more discussions
 
