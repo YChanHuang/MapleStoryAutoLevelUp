@@ -1,0 +1,26 @@
+# 🚀 High-Performance Configuration for Efficient Dice Rolling
+# This config optimizes for speed while maintaining good detection accuracy
+
+health_monitor:
+  fps_limit: 60  # Responsive health monitoring
+
+system:
+  # 🎯 AutoDiceRoller Performance Settings
+  fps_limit_auto_dice_roller: 2.5   # 🚥 Fast dice rolling: ~0.4s intervals (2.5 rolls/sec)
+                                    #     - Default: 0.5 (2s intervals) 
+                                    #     - This gives you 5x faster rolling!
+                                    #     - Still safe for detection reliability
+  
+  # 🖥️ System Performance Optimization  
+  fps_limit_main: 60                # 🚥 Smooth main loop for responsive UI
+  fps_limit_window_capturor: 30     # 🚥 High-quality frame capture for accurate detection
+  fps_limit_keyboard_controller: 30 # 🚥 Responsive keyboard input
+  
+  # 🌍 Your server/language settings (adjust as needed)
+  server: "TW"        # ⚙️ Options: "TW" "NA" 
+  language: "cn"      # ⚙️ Options: "eng" "cn"
+
+# 🔧 Optional: Profiler for performance monitoring
+# profiler:
+#   enable: True         # ✅ Enable to monitor performance
+#   print_frequency: 30  # Print stats every 30 frames
