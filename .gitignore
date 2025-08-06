@@ -1,15 +1,78 @@
+# Build artifacts
 build/
+dist/
+*.spec
+*.exe
+
+# Output files
 screenshot/
 nametag/
 video/
-dist/
-test/
-*__pycache__/
 *.log
-*.DS_Store
 *.prof
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Tests
+test/
+testing_tools/
+
+# macOS metadata
+*.DS_Store
+
+# PyCharm / IntelliJ
+.idea/
+
+# Configs
 *.config_tmp.yaml
 *config_custom.yaml
-*.exe
-*.spec
-*.idea
+config/*_backup.yaml
+*.envrc
+.envrc
+
+# AutoDiceRoller Development Files
+# Dice rolling logs and test results
+*dice_rolling*.txt
+*dice_rolling*.log
+dice_roller_analysis_report.md
+test_results_summary.md
+*performance_report.md
+*production_analysis.md
+*synchronized_performance_update.md
+
+# Debug and coordinate tools
+coordinate_tools/
+debug_tools/
+*debug*.png
+debug_images/
+optimize_fps_config.py
+test_opencv_speed.py
+
+# Development documentation that may contain sensitive info
+REFACTORING_README.md
+
+# Temporary and sensitive files
+*.txt
+*.tmp
+*.backup
+*_test_*
+*_log_*
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE and editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS specific files
+Thumbs.db
+ehthumbs.db
+*.lnk
