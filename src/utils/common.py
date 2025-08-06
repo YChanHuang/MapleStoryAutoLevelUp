@@ -690,7 +690,7 @@ def click_in_game_window(window_title, coord):
     # Add human-like clicking with safe timing to prevent missing targets
     # Longer delay ensures we don't skip over target combinations
     import random
-    human_delay = random.uniform(0.9, 1.2)
+    human_delay = random.uniform(0.8, 1.1)
     
     pyautogui.click(loc_click)
     logger.info(f"[click_in_game_window] click at {loc_click}, next click delay: {human_delay:.2f}s")
