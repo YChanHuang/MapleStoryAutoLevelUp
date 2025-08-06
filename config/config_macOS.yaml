@@ -2,7 +2,7 @@
 # The following configuration is only for macOS
 
 game_window:
-  size: [776, 1280]
+  size: [1208, 2136]  # Updated to match actual Retina-scaled capture size
   title_bar_height: 85         # 📐 Title Bar Height (Note titel bar will be cropped before window resize)
 
 monster_detect:
