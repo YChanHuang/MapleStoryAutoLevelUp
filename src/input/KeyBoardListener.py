@@ -10,6 +10,9 @@ from pynput import keyboard
 
 # Local import
 from src.utils.logger import logger
+from src.utils.common import is_mac
+if is_mac():
+    import Quartz
 
 class KeyBoardListener():
     '''
@@ -135,8 +138,33 @@ class KeyBoardListener():
         - True
         - False
         '''
-        active_window = gw.getActiveWindow()
-        return active_window is not None and self.window_title in active_window.title()
+        if is_mac():
+            # macOS implementation - simplified approach
+            # Since macOS window detection is tricky, we'll assume the window is active
+            # if the MapleStory Worlds process is running
+            try:
+                # Get all windows and check if MapleStory Worlds exists
+                options = Quartz.kCGWindowListOptionOnScreenOnly | Quartz.kCGWindowListExcludeDesktopElements
+                window_list = Quartz.CGWindowListCopyWindowInfo(options, Quartz.kCGNullWindowID)
+                
+                for window in window_list:
+                    owner_name = window.get(Quartz.kCGWindowOwnerName, '')
+                    if self.window_title in owner_name:
+                        logger.debug(f"[is_game_window_active] Found {self.window_title} window, assuming active")
+                        return True
+                        
+                logger.debug(f"[is_game_window_active] {self.window_title} window not found")
+                return False
+            except Exception as e:
+                logger.warning(f"[is_game_window_active] Error checking window on macOS: {e}")
+                # Fallback: assume game window is active
+                return True
+        else:
+            # Windows implementation using pygetwindow
+            active_window = gw.getActiveWindow()
+            return active_window is not None and self.window_title in active_window.title()
+        
+        return False
 
     def limit_fps(self):
         '''

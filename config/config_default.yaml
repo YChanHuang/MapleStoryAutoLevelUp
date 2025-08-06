@@ -322,7 +322,7 @@ system:
   fps_limit_keyboard_controller: 30 # 🚥 Keyboard controller thread FPS
   fps_limit_window_capturor: 15     # 🚥 Window capture thread FPS
   fps_limit_route_recorder: 10      # 🚥 Route recorder FPS
-  fps_limit_auto_dice_roller: 1     # 🚥 Auto rice roller FPS
+  fps_limit_auto_dice_roller: 0.5   # 🚥 Auto dice roller FPS (reduced for more human-like clicking)
   key_debounce_interval: 1          # ⏱️ Cooldown (in seconds) between function key presses (e.g., F1, F2...)
   server: "TW"                      # ⚙️ Options: "TW" "NA"
   language: "cn"                    # ⚙️ Options: "eng" "cn"

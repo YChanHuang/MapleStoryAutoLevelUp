@@ -663,7 +663,7 @@ def get_window_region_mac(window_title):
 
 def click_in_game_window(window_title, coord):
     '''
-    Mouse click on a game window coordinate
+    Mouse click on a game window coordinate with human-like delay
     '''
     # game_window = gw.getWindowsWithTitle(window_title)[0]
     # win_left, win_top = game_window.left, game_window.top
@@ -686,8 +686,17 @@ def click_in_game_window(window_title, coord):
         win_left, win_top = game_window.left, game_window.top
 
     loc_click = (win_left + coord[0], win_top + coord[1])
+    
+    # Add human-like clicking with safe timing to prevent missing targets
+    # Longer delay ensures we don't skip over target combinations
+    import random
+    human_delay = random.uniform(0.9, 1.2)
+    
     pyautogui.click(loc_click)
-    logger.info(f"[click_in_game_window] click at {loc_click}")
+    logger.info(f"[click_in_game_window] click at {loc_click}, next click delay: {human_delay:.2f}s")
+    
+    # Sleep to make clicking more human-like but very fast
+    time.sleep(human_delay)
 
 def send_email(email_addr, password,
                to, subject, body, attachment_path):

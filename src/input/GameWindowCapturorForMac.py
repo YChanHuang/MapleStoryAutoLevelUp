@@ -110,11 +110,13 @@ class GameWindowCapturor:
         開始螢幕擷取，並不斷更新 frame。
         '''
         while not self.is_terminated:
-            # Update self.region
-            self.update_window_region()
-
             # Update self.frame
-            self.capture_frame()
+            try:
+                self.capture_frame()
+            except Exception as e:
+                logger.warning(f"[start_capture] Failed to capture frame: {e}")
+                # Only update window region if capture fails
+                self.update_window_region()
 
             # Limit FPS to save systme resources
             self.limit_fps()
