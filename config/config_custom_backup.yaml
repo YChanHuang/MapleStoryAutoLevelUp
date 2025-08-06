@@ -1,0 +1,6 @@
+health_monitor:
+  fps_limit: 30
+system:
+  fps_limit_auto_dice_roller: 1.0
+  fps_limit_main: 30
+  fps_limit_window_capturor: 30
